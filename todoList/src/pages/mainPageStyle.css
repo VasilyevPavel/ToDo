@@ -1,0 +1,16 @@
+.main {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.title {
+  margin-bottom: 30px;
+}
+.bottom-block {
+  display: flex;
+  justify-content: space-between;
+
+  align-items: center;
+}
