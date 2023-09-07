@@ -1,5 +1,6 @@
 {
   "name": "todolist",
+  "homepage": "https://vasilyevpavel.github.io/ToDo_List/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,7 +9,9 @@
     "build": "tsc -p tsconfig.prod.json && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "jest"
+    "test": "jest",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -38,6 +41,7 @@
     "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "gh-pages": "^6.0.0",
     "jest": "^29.6.4",
     "jest-environment-jsdom": "^29.6.4",
     "jest-watch-typeahead": "^2.2.2",
