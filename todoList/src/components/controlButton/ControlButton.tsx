@@ -1,5 +1,6 @@
 import Button from '@mui/material/Button';
 import { Dispatch, SetStateAction } from 'react';
+import { useMediaQuery } from '@mui/material';
 
 interface IControlButtonProps {
   title: string;
@@ -16,6 +17,7 @@ export default function ControlButton({
   activeButton,
   setActiveButton,
 }: IControlButtonProps) {
+  const isMobile = useMediaQuery('(max-width:768px)');
   const handleButtonClick = () => {
     switch (title) {
       case 'All':
@@ -41,9 +43,14 @@ export default function ControlButton({
 
   return (
     <Button
+      className="btn"
       variant="contained"
       onClick={handleButtonClick}
       color={activeButton === title ? 'success' : 'primary'}
+      sx={{
+        fontSize: isMobile ? '10px' : '16px',
+        padding: isMobile ? '8px 16px' : '10px 20px',
+      }}
     >
       {title}
     </Button>

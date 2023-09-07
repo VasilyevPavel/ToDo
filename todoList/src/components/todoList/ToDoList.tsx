@@ -6,9 +6,8 @@ import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Stack from '@mui/material/Stack';
 import Counter from '../counter/Counter';
-import ButtonGroup from '@mui/material/ButtonGroup';
+import { Box } from '@mui/material';
 import ControlButton from '../controlButton/ControlButton';
 import './toDoListStyle.css';
 
@@ -100,6 +99,7 @@ export default function ToDoList({ refresh }: IToDoListProps) {
                 />
 
                 <IconButton
+                  data-testid="toggle-btn"
                   onClick={() => handleDeleteClick(todo.id)}
                   aria-label="delete"
                   size="small"
@@ -113,7 +113,9 @@ export default function ToDoList({ refresh }: IToDoListProps) {
       </List>
       <div className="bottom-block">
         <Counter length={toDoList.length} />
-        <ButtonGroup>
+        <Box
+          sx={{ width: '60%', display: 'flex', justifyContent: 'space-evenly' }}
+        >
           <ControlButton
             title={'All'}
             setFilter={setFilter}
@@ -132,7 +134,7 @@ export default function ToDoList({ refresh }: IToDoListProps) {
             activeButton={activeButton}
             setActiveButton={setActiveButton}
           />
-        </ButtonGroup>
+        </Box>
         <ControlButton
           title={'Clear completed'}
           handleClearCompleted={handleClearCompleted}

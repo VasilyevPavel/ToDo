@@ -44,30 +44,41 @@ export default function Input({ toggleRefresh }: IInputProps) {
   return (
     <Box
       sx={{
-        width: 500,
-        maxWidth: '100%',
+        width: '104%',
+        borderBottom: '2px solid grey',
         display: 'flex',
+        justifyContent: 'center',
+        paddingBottom: '20px',
       }}
     >
-      <TextField
-        fullWidth
-        label="ToDo"
-        name="inputText"
-        type="text"
-        placeholder="What needs to be done"
-        value={formData.inputText}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        required
-      />
-      <Button
-        onClick={handleAddTodo}
-        className="input-btn"
-        variant="contained"
-        color="success"
+      <Box
+        sx={{
+          width: '80%',
+
+          display: 'flex',
+        }}
       >
-        Add ToDo
-      </Button>
+        <TextField
+          fullWidth
+          label="ToDo"
+          name="inputText"
+          type="text"
+          placeholder="What needs to be done"
+          value={formData.inputText}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          sx={{ marginRight: '20px' }}
+          required
+        />
+        <Button
+          onClick={handleAddTodo}
+          className="input-btn"
+          variant="contained"
+          color="success"
+        >
+          Add ToDo
+        </Button>
+      </Box>
     </Box>
   );
 }

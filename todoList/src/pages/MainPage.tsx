@@ -13,8 +13,10 @@ export default function MainPage() {
   return (
     <div className="main">
       <h1 className="title">ToDos</h1>
-      <Input toggleRefresh={toggleRefresh} />
-      <ToDoList refresh={refresh} />
+      <div className="wrapper">
+        <Input toggleRefresh={toggleRefresh} />
+        <ToDoList refresh={refresh} />
+      </div>
     </div>
   );
 }

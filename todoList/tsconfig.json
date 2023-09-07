@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "src/__tests__/ToDoList.test.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
