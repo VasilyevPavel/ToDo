@@ -24,3 +24,8 @@
   border: 2px solid grey;
   padding: 20px;
 }
+@media (max-width: 768px) {
+  .main {
+    width: 88%;
+  }
+}

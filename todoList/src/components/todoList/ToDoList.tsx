@@ -9,6 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Counter from '../counter/Counter';
 import { Box } from '@mui/material';
 import ControlButton from '../controlButton/ControlButton';
+
 import './toDoListStyle.css';
 
 interface ToDo {
@@ -112,33 +113,40 @@ export default function ToDoList({ refresh }: IToDoListProps) {
         )}
       </List>
       <div className="bottom-block">
-        <Counter length={toDoList.length} />
-        <Box
-          sx={{ width: '60%', display: 'flex', justifyContent: 'space-evenly' }}
-        >
+        <div className="btn-wrapper">
+          <Counter length={toDoList.length} />
+          <Box
+            sx={{
+              width: '60%',
+              display: 'flex',
+              justifyContent: 'space-evenly',
+            }}
+          >
+            <ControlButton
+              title={'All'}
+              setFilter={setFilter}
+              activeButton={activeButton}
+              setActiveButton={setActiveButton}
+            />
+            <ControlButton
+              title={'Active'}
+              setFilter={setFilter}
+              activeButton={activeButton}
+              setActiveButton={setActiveButton}
+            />
+            <ControlButton
+              title={'Completed'}
+              setFilter={setFilter}
+              activeButton={activeButton}
+              setActiveButton={setActiveButton}
+            />
+          </Box>
+
           <ControlButton
-            title={'All'}
-            setFilter={setFilter}
-            activeButton={activeButton}
-            setActiveButton={setActiveButton}
+            title={'Clear completed'}
+            handleClearCompleted={handleClearCompleted}
           />
-          <ControlButton
-            title={'Active'}
-            setFilter={setFilter}
-            activeButton={activeButton}
-            setActiveButton={setActiveButton}
-          />
-          <ControlButton
-            title={'Completed'}
-            setFilter={setFilter}
-            activeButton={activeButton}
-            setActiveButton={setActiveButton}
-          />
-        </Box>
-        <ControlButton
-          title={'Clear completed'}
-          handleClearCompleted={handleClearCompleted}
-        />
+        </div>
       </div>
     </>
   );

@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
 
 import './inputStyle.css';
 
@@ -40,6 +41,7 @@ export default function Input({ toggleRefresh }: IInputProps) {
       handleAddTodo();
     }
   };
+  const isMobile = useMediaQuery('(max-width:768px)');
 
   return (
     <Box
@@ -56,6 +58,8 @@ export default function Input({ toggleRefresh }: IInputProps) {
           width: '80%',
 
           display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
+          alignItems: 'center',
         }}
       >
         <TextField
@@ -67,7 +71,10 @@ export default function Input({ toggleRefresh }: IInputProps) {
           value={formData.inputText}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          sx={{ marginRight: '20px' }}
+          sx={{
+            marginRight: isMobile ? '0px' : '20px',
+            marginBottom: isMobile ? '20px' : '0px',
+          }}
           required
         />
         <Button
