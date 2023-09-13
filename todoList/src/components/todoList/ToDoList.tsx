@@ -7,6 +7,8 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Counter from '../counter/Counter';
+import useSound from 'use-sound';
+import fart from '../../../public/wet-fart-6139.mp3';
 import { Box } from '@mui/material';
 import ControlButton from '../controlButton/ControlButton';
 
@@ -45,10 +47,11 @@ export default function ToDoList({ refresh }: IToDoListProps) {
       localStorage.setItem('todos', JSON.stringify(updatedToDoList));
     }
   };
-
+  const [play] = useSound(fart);
   const handleDeleteClick = (id: string) => {
     const updatedToDoList = toDoList.filter((todo) => todo.id !== id);
     setToDoList(updatedToDoList);
+    play();
     localStorage.setItem('todos', JSON.stringify(updatedToDoList));
   };
 

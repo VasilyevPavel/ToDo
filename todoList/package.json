@@ -21,7 +21,8 @@
     "@types/testing-library__react": "^10.2.0",
     "jest-watch-typeahead": "^2.2.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "use-sound": "^4.0.1"
   },
   "devDependencies": {
     "@swc/core": "^1.3.82",

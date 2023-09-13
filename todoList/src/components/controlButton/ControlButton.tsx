@@ -50,6 +50,7 @@ export default function ControlButton({
       sx={{
         fontSize: isMobile ? '10px' : '16px',
         padding: isMobile ? '8px 16px' : '10px 20px',
+        marginRight: isMobile ? '10px' : '0px',
       }}
     >
       {title}
