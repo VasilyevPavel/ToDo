@@ -22,7 +22,7 @@ interface ToDo {
 
 interface IToDoListProps {
   refresh: boolean;
-  toggleRefresh?: () => void;
+  toggleRefresh: () => void;
 }
 
 export default function ToDoList({ refresh, toggleRefresh }: IToDoListProps) {

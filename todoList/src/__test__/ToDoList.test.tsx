@@ -21,7 +21,7 @@ describe('ToDoList component', () => {
   test('рендерит пустой список', () => {
     setLocalStorageData(clearMockLocalStorage);
 
-    render(<ToDoList refresh={false} />);
+    render(<ToDoList refresh={false} toggleRefresh={() => {}} />);
 
     const headerElement = screen.getByText(/There are no todo's/i);
     expect(headerElement).toBeTruthy();
@@ -30,7 +30,7 @@ describe('ToDoList component', () => {
   test('рендерит список задач', () => {
     setLocalStorageData(mockLocalStorage);
 
-    render(<ToDoList refresh={false} />);
+    render(<ToDoList refresh={false} toggleRefresh={() => {}} />);
 
     const task1 = screen.getByText('Task 1');
     const task2 = screen.getByText('Task 2');
@@ -44,7 +44,7 @@ describe('ToDoList component', () => {
   test('меняет статус задач', () => {
     setLocalStorageData(mockLocalStorage);
 
-    render(<ToDoList refresh={false} />);
+    render(<ToDoList refresh={false} toggleRefresh={() => {}} />);
 
     const checkboxes = screen.getAllByRole('checkbox') as HTMLInputElement[];
     checkboxes.forEach((checkbox) => {
@@ -63,7 +63,7 @@ describe('ToDoList component', () => {
   test('показывает только невыполненные задачи при нажатии на "Active"', () => {
     setLocalStorageData(mockLocalStorage);
 
-    render(<ToDoList refresh={false} />);
+    render(<ToDoList refresh={false} toggleRefresh={() => {}} />);
 
     const checkboxes = screen.getAllByRole('checkbox') as HTMLInputElement[];
     checkboxes.forEach((checkbox) => {
@@ -89,7 +89,7 @@ describe('ToDoList component', () => {
   test('показывает только выполненные задачи при нажатии на "Completed"', () => {
     setLocalStorageData(mockLocalStorage);
 
-    render(<ToDoList refresh={false} />);
+    render(<ToDoList refresh={false} toggleRefresh={() => {}} />);
 
     const checkboxes = screen.getAllByRole('checkbox') as HTMLInputElement[];
     checkboxes.forEach((checkbox) => {
@@ -119,7 +119,7 @@ describe('ToDoList component', () => {
       { id: '5', text: 'Task 5', isCompleted: true },
     ]);
 
-    render(<ToDoList refresh={false} />);
+    render(<ToDoList refresh={false} toggleRefresh={() => {}} />);
 
     const clearCompletedButton = screen.getByText('Clear completed');
     fireEvent.click(clearCompletedButton);
