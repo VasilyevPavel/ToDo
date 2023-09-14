@@ -15,7 +15,7 @@ export default function MainPage() {
       <h1 className="title">ToDos</h1>
       <div className="wrapper">
         <Input toggleRefresh={toggleRefresh} />
-        <ToDoList refresh={refresh} />
+        <ToDoList refresh={refresh} toggleRefresh={toggleRefresh} />
       </div>
     </div>
   );

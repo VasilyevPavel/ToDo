@@ -22,18 +22,25 @@ interface ToDo {
 
 interface IToDoListProps {
   refresh: boolean;
+  toggleRefresh: () => void;
 }
 
-export default function ToDoList({ refresh }: IToDoListProps) {
+export default function ToDoList({ refresh, toggleRefresh }: IToDoListProps) {
   const [toDoList, setToDoList] = useState<ToDo[]>([]);
   const [filter, setFilter] = useState<string>('All');
   const [activeButton, setActiveButton] = useState<string>('All');
+  const [toDoCount, setToDoCount] = useState<number>(0);
 
   useEffect(() => {
     const storedToDoList: ToDo[] = JSON.parse(
       localStorage.getItem('todos') || '[]'
     );
     setToDoList(storedToDoList);
+
+    const activeToDo = storedToDoList.filter(
+      (el) => el.isCompleted === false
+    ).length;
+    setToDoCount(activeToDo);
   }, [refresh]);
 
   const handleCheckboxChange = (id: string) => {
@@ -44,6 +51,7 @@ export default function ToDoList({ refresh }: IToDoListProps) {
       updatedToDoList[todoIndex].isCompleted =
         !updatedToDoList[todoIndex].isCompleted;
       setToDoList(updatedToDoList);
+      toggleRefresh();
       localStorage.setItem('todos', JSON.stringify(updatedToDoList));
     }
   };
@@ -53,6 +61,7 @@ export default function ToDoList({ refresh }: IToDoListProps) {
     setToDoList(updatedToDoList);
     play();
     localStorage.setItem('todos', JSON.stringify(updatedToDoList));
+    toggleRefresh();
   };
 
   const filteredToDoList = () => {
@@ -117,7 +126,7 @@ export default function ToDoList({ refresh }: IToDoListProps) {
       </List>
       <div className="bottom-block">
         <div className="btn-wrapper">
-          <Counter length={toDoList.length} />
+          <Counter length={toDoCount} />
           <Box
             sx={{
               width: '60%',
