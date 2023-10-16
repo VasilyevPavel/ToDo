@@ -1,22 +1,36 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 
 import './inputStyle.css';
+import { ToDo } from '../todoList/ToDoList';
 
 interface IInputProps {
   toggleRefresh: () => void;
+  editId: string;
 }
+
 interface IInput {
   inputText: string;
 }
 
-export default function Input({ toggleRefresh }: IInputProps) {
+export default function Input({ toggleRefresh, editId }: IInputProps) {
   const [formData, setFormData] = useState<IInput>({
     inputText: '',
   });
+
+  useEffect(() => {
+    if (editId) {
+      const todos: ToDo[] = JSON.parse(localStorage.getItem('todos') || '[]');
+      const editedTodo = todos.find((todo) => todo.id === editId);
+
+      if (editedTodo) {
+        setFormData({ inputText: editedTodo.text });
+      }
+    }
+  }, [editId]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -26,9 +40,18 @@ export default function Input({ toggleRefresh }: IInputProps) {
     if (formData.inputText.trim() === '') return;
     const todos = JSON.parse(localStorage.getItem('todos') || '[]');
 
-    const id = new Date().getTime();
+    if (editId) {
+      const todoIndex = todos.findIndex(
+        (todo: { id: string }) => todo.id === editId
+      );
 
-    todos.push({ id, text: formData.inputText, isCompleted: false });
+      if (todoIndex !== -1) {
+        todos[todoIndex].text = formData.inputText;
+      }
+    } else {
+      const id = new Date().getTime();
+      todos.push({ id, text: formData.inputText, isCompleted: false });
+    }
 
     localStorage.setItem('todos', JSON.stringify(todos));
 
@@ -41,6 +64,7 @@ export default function Input({ toggleRefresh }: IInputProps) {
       handleAddTodo();
     }
   };
+
   const isMobile = useMediaQuery('(max-width:768px)');
 
   return (
@@ -56,7 +80,6 @@ export default function Input({ toggleRefresh }: IInputProps) {
       <Box
         sx={{
           width: '80%',
-
           display: 'flex',
           flexDirection: isMobile ? 'column' : 'row',
           alignItems: 'center',
@@ -83,7 +106,7 @@ export default function Input({ toggleRefresh }: IInputProps) {
           variant="contained"
           color="success"
         >
-          Add ToDo
+          {editId ? 'Save' : 'Add ToDo'}
         </Button>
       </Box>
     </Box>

@@ -6,6 +6,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import Counter from '../counter/Counter';
 import useSound from 'use-sound';
 import fart from '../../../public/wet-fart-6139.mp3';
@@ -14,7 +15,7 @@ import ControlButton from '../controlButton/ControlButton';
 
 import './toDoListStyle.css';
 
-interface ToDo {
+export interface ToDo {
   id: string;
   text: string;
   isCompleted: boolean;
@@ -23,9 +24,14 @@ interface ToDo {
 interface IToDoListProps {
   refresh: boolean;
   toggleRefresh: () => void;
+  handleEditClick: (id: string) => void;
 }
 
-export default function ToDoList({ refresh, toggleRefresh }: IToDoListProps) {
+export default function ToDoList({
+  refresh,
+  toggleRefresh,
+  handleEditClick,
+}: IToDoListProps) {
   const [toDoList, setToDoList] = useState<ToDo[]>([]);
   const [filter, setFilter] = useState<string>('All');
   const [activeButton, setActiveButton] = useState<string>('All');
@@ -110,6 +116,14 @@ export default function ToDoList({ refresh, toggleRefresh }: IToDoListProps) {
                   primary={todo.text}
                   className={textClass}
                 />
+                <IconButton
+                  data-testid="toggle-btn"
+                  onClick={() => handleEditClick(todo.id)}
+                  aria-label="delete"
+                  size="small"
+                >
+                  <EditIcon fontSize="small" />
+                </IconButton>
 
                 <IconButton
                   data-testid="toggle-btn"
