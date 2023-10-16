@@ -4,7 +4,8 @@ import Input from '../components/input/Input';
 describe('Input component', () => {
   test('запись добавляется при клике на кнопку', () => {
     const toggleRefreshMock = jest.fn() as jest.Mock;
-    render(<Input toggleRefresh={toggleRefreshMock} />);
+    const editIdMock = '';
+    render(<Input toggleRefresh={toggleRefreshMock} editId={editIdMock} />);
 
     const inputField = screen.getByPlaceholderText(
       'What needs to be done'
@@ -33,7 +34,8 @@ describe('Input component', () => {
 
   test('запись добавляется при клике на Enter', () => {
     const toggleRefreshMock = jest.fn() as jest.Mock;
-    render(<Input toggleRefresh={toggleRefreshMock} />);
+    const editIdMock = '';
+    render(<Input toggleRefresh={toggleRefreshMock} editId={editIdMock} />);
 
     const inputField = screen.getByPlaceholderText(
       'What needs to be done'

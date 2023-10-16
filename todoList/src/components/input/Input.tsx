@@ -10,13 +10,18 @@ import { ToDo } from '../todoList/ToDoList';
 interface IInputProps {
   toggleRefresh: () => void;
   editId: string;
+  setEditId: (id: string) => void;
 }
 
 interface IInput {
   inputText: string;
 }
 
-export default function Input({ toggleRefresh, editId }: IInputProps) {
+export default function Input({
+  toggleRefresh,
+  editId,
+  setEditId,
+}: IInputProps) {
   const [formData, setFormData] = useState<IInput>({
     inputText: '',
   });
@@ -50,10 +55,27 @@ export default function Input({ toggleRefresh, editId }: IInputProps) {
       }
     } else {
       const id = new Date().getTime();
-      todos.push({ id, text: formData.inputText, isCompleted: false });
+      todos.push({
+        id,
+        text: formData.inputText,
+        isCompleted: false,
+        section: '',
+      });
     }
 
     localStorage.setItem('todos', JSON.stringify(todos));
+
+    setFormData({ inputText: '' });
+    setEditId('');
+    toggleRefresh();
+  };
+
+  const handleAddSection = () => {
+    if (formData.inputText.trim() === '') return;
+    const sections = JSON.parse(localStorage.getItem('sections') || '[]');
+    const id = new Date().getTime();
+    sections.push({ id, text: formData.inputText });
+    localStorage.setItem('sections', JSON.stringify(sections));
 
     setFormData({ inputText: '' });
     toggleRefresh();
@@ -73,13 +95,13 @@ export default function Input({ toggleRefresh, editId }: IInputProps) {
         width: '104%',
         borderBottom: '2px solid grey',
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         paddingBottom: '20px',
       }}
     >
       <Box
         sx={{
-          width: '80%',
+          width: '95%',
           display: 'flex',
           flexDirection: isMobile ? 'column' : 'row',
           alignItems: 'center',
@@ -100,6 +122,7 @@ export default function Input({ toggleRefresh, editId }: IInputProps) {
           }}
           required
         />
+
         <Button
           onClick={handleAddTodo}
           className="input-btn"
@@ -107,6 +130,14 @@ export default function Input({ toggleRefresh, editId }: IInputProps) {
           color="success"
         >
           {editId ? 'Save' : 'Add ToDo'}
+        </Button>
+        <Button
+          onClick={handleAddSection}
+          className="input-btn"
+          variant="contained"
+          color="success"
+        >
+          Add folder
         </Button>
       </Box>
     </Box>

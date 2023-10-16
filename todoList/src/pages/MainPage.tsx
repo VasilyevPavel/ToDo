@@ -9,7 +9,7 @@ export default function MainPage() {
   const handleEditClick = (id: string) => {
     setEditId(id);
   };
-  console.log('edit', editId);
+
   const toggleRefresh = () => {
     setRefresh(!refresh);
   };
@@ -17,8 +17,13 @@ export default function MainPage() {
   return (
     <div className="main">
       <h1 className="title">ToDos</h1>
+
       <div className="wrapper">
-        <Input toggleRefresh={toggleRefresh} editId={editId} />
+        <Input
+          toggleRefresh={toggleRefresh}
+          editId={editId}
+          setEditId={setEditId}
+        />
         <ToDoList
           refresh={refresh}
           toggleRefresh={toggleRefresh}

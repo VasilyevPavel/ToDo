@@ -19,6 +19,7 @@
 }
 .list-item-text {
   text-decoration: none;
+  cursor: grab;
 }
 
 .list-item-text.completed {

@@ -14,8 +14,14 @@ import { Box } from '@mui/material';
 import ControlButton from '../controlButton/ControlButton';
 
 import './toDoListStyle.css';
+import Section from '../section/Section';
 
 export interface ToDo {
+  id: string;
+  text: string;
+  isCompleted: boolean;
+}
+export interface ISection {
   id: string;
   text: string;
   isCompleted: boolean;
@@ -36,12 +42,17 @@ export default function ToDoList({
   const [filter, setFilter] = useState<string>('All');
   const [activeButton, setActiveButton] = useState<string>('All');
   const [toDoCount, setToDoCount] = useState<number>(0);
+  const [sectionList, setSectionList] = useState<ISection[]>([]);
 
   useEffect(() => {
     const storedToDoList: ToDo[] = JSON.parse(
       localStorage.getItem('todos') || '[]'
     );
+    const storedSectionList: ISection[] = JSON.parse(
+      localStorage.getItem('sections') || '[]'
+    );
     setToDoList(storedToDoList);
+    setSectionList(storedSectionList);
 
     const activeToDo = storedToDoList.filter(
       (el) => el.isCompleted === false
@@ -90,6 +101,11 @@ export default function ToDoList({
   return (
     <>
       <List className="list-container">
+        {sectionList.map((section) => (
+          <Section section={section} toggleRefresh={toggleRefresh} />
+        ))}
+      </List>
+      <List className="list-container">
         {filteredToDoList().length === 0 ? (
           <h1>There are no todo's</h1>
         ) : (
@@ -100,7 +116,7 @@ export default function ToDoList({
               : 'list-item-text';
 
             return (
-              <ListItem key={todo.id} disablePadding>
+              <ListItem key={todo.id} disablePadding draggable={true}>
                 <ListItemIcon>
                   <Checkbox
                     edge="start"
