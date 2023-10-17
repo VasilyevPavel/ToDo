@@ -5,7 +5,14 @@ describe('Input component', () => {
   test('запись добавляется при клике на кнопку', () => {
     const toggleRefreshMock = jest.fn() as jest.Mock;
     const editIdMock = '';
-    render(<Input toggleRefresh={toggleRefreshMock} editId={editIdMock} />);
+    const setEditIdMock = jest.fn() as jest.Mock;
+    render(
+      <Input
+        toggleRefresh={toggleRefreshMock}
+        editId={editIdMock}
+        setEditId={setEditIdMock}
+      />
+    );
 
     const inputField = screen.getByPlaceholderText(
       'What needs to be done'
@@ -35,7 +42,14 @@ describe('Input component', () => {
   test('запись добавляется при клике на Enter', () => {
     const toggleRefreshMock = jest.fn() as jest.Mock;
     const editIdMock = '';
-    render(<Input toggleRefresh={toggleRefreshMock} editId={editIdMock} />);
+    const setEditIdMock = jest.fn() as jest.Mock;
+    render(
+      <Input
+        toggleRefresh={toggleRefreshMock}
+        editId={editIdMock}
+        setEditId={setEditIdMock}
+      />
+    );
 
     const inputField = screen.getByPlaceholderText(
       'What needs to be done'

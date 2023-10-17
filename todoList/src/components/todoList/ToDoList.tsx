@@ -1,26 +1,22 @@
 import { useEffect, useState } from 'react';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+
 import Counter from '../counter/Counter';
-import useSound from 'use-sound';
-import fart from '../../../public/wet-fart-6139.mp3';
+
 import { Box } from '@mui/material';
 import ControlButton from '../controlButton/ControlButton';
 
 import './toDoListStyle.css';
 import Section from '../section/Section';
+import OneToDo from '../oneToDo/OneToDo';
 
 export interface ToDo {
   id: string;
   text: string;
   isCompleted: boolean;
+  section?: string;
 }
+
 export interface ISection {
   id: string;
   text: string;
@@ -43,6 +39,7 @@ export default function ToDoList({
   const [activeButton, setActiveButton] = useState<string>('All');
   const [toDoCount, setToDoCount] = useState<number>(0);
   const [sectionList, setSectionList] = useState<ISection[]>([]);
+  const [currentToDo, setCurrentToDo] = useState<ToDo | null>(null);
 
   useEffect(() => {
     const storedToDoList: ToDo[] = JSON.parse(
@@ -59,27 +56,6 @@ export default function ToDoList({
     ).length;
     setToDoCount(activeToDo);
   }, [refresh]);
-
-  const handleCheckboxChange = (id: string) => {
-    const updatedToDoList = [...toDoList];
-    const todoIndex = updatedToDoList.findIndex((todo) => todo.id === id);
-
-    if (todoIndex !== -1) {
-      updatedToDoList[todoIndex].isCompleted =
-        !updatedToDoList[todoIndex].isCompleted;
-      setToDoList(updatedToDoList);
-      toggleRefresh();
-      localStorage.setItem('todos', JSON.stringify(updatedToDoList));
-    }
-  };
-  const [play] = useSound(fart);
-  const handleDeleteClick = (id: string) => {
-    const updatedToDoList = toDoList.filter((todo) => todo.id !== id);
-    setToDoList(updatedToDoList);
-    play();
-    localStorage.setItem('todos', JSON.stringify(updatedToDoList));
-    toggleRefresh();
-  };
 
   const filteredToDoList = () => {
     switch (filter) {
@@ -102,56 +78,46 @@ export default function ToDoList({
     <>
       <List className="list-container">
         {sectionList.map((section) => (
-          <Section section={section} toggleRefresh={toggleRefresh} />
+          <Section
+            key={section.id}
+            handleEditClick={handleEditClick}
+            section={section}
+            toDoList={toDoList}
+            currentToDo={currentToDo}
+            setToDoList={setToDoList}
+            setCurrentToDo={setCurrentToDo}
+            toggleRefresh={toggleRefresh}
+            filteredToDoList={filteredToDoList}
+          />
         ))}
       </List>
       <List className="list-container">
         {filteredToDoList().length === 0 ? (
           <h1>There are no todo's</h1>
         ) : (
-          filteredToDoList().map((todo: ToDo) => {
-            const labelId = `checkbox-list-label-${todo.id}`;
-            const textClass = todo.isCompleted
-              ? 'list-item-text completed'
-              : 'list-item-text';
+          filteredToDoList()
+            .filter((el) => el.section === '')
+            .map((todo: ToDo) => {
+              const labelId = `checkbox-list-label-${todo.id}`;
+              const textClass = todo.isCompleted
+                ? 'list-item-text completed'
+                : 'list-item-text';
 
-            return (
-              <ListItem key={todo.id} disablePadding draggable={true}>
-                <ListItemIcon>
-                  <Checkbox
-                    edge="start"
-                    checked={todo.isCompleted}
-                    tabIndex={-1}
-                    disableRipple
-                    inputProps={{ 'aria-labelledby': labelId }}
-                    onChange={() => handleCheckboxChange(todo.id)}
-                  />
-                </ListItemIcon>
-                <ListItemText
-                  id={todo.id}
-                  primary={todo.text}
-                  className={textClass}
+              return (
+                <OneToDo
+                  key={todo.id}
+                  labelId={labelId}
+                  textClass={textClass}
+                  handleEditClick={handleEditClick}
+                  toggleRefresh={toggleRefresh}
+                  todo={todo}
+                  currentToDo={currentToDo}
+                  setCurrentToDo={setCurrentToDo}
+                  toDoList={toDoList}
+                  setToDoList={setToDoList}
                 />
-                <IconButton
-                  data-testid="toggle-btn"
-                  onClick={() => handleEditClick(todo.id)}
-                  aria-label="delete"
-                  size="small"
-                >
-                  <EditIcon fontSize="small" />
-                </IconButton>
-
-                <IconButton
-                  data-testid="toggle-btn"
-                  onClick={() => handleDeleteClick(todo.id)}
-                  aria-label="delete"
-                  size="small"
-                >
-                  <DeleteIcon fontSize="small" />
-                </IconButton>
-              </ListItem>
-            );
-          })
+              );
+            })
         )}
       </List>
       <div className="bottom-block">
@@ -169,24 +135,28 @@ export default function ToDoList({
               setFilter={setFilter}
               activeButton={activeButton}
               setActiveButton={setActiveButton}
+              toggleRefresh={toggleRefresh}
             />
             <ControlButton
               title={'Active'}
               setFilter={setFilter}
               activeButton={activeButton}
               setActiveButton={setActiveButton}
+              toggleRefresh={toggleRefresh}
             />
             <ControlButton
               title={'Completed'}
               setFilter={setFilter}
               activeButton={activeButton}
               setActiveButton={setActiveButton}
+              toggleRefresh={toggleRefresh}
             />
           </Box>
 
           <ControlButton
             title={'Clear completed'}
             handleClearCompleted={handleClearCompleted}
+            toggleRefresh={toggleRefresh}
           />
         </div>
       </div>
