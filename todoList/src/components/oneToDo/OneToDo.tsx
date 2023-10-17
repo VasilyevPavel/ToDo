@@ -35,12 +35,12 @@ export default function OneToDo({
   setToDoList,
   toggleRefresh,
 }: OneToDoProps) {
-  function dragStartHandler(e: React.DragEvent, toDo: ToDo) {
+  function dragStartHandler(toDo: ToDo) {
     setCurrentToDo(toDo);
   }
 
-  function dragLeaveHandler(e: React.DragEvent) {}
-  function dragEndHandler(e: React.DragEvent) {}
+  function dragLeaveHandler() {}
+  function dragEndHandler() {}
   function dragOverHandler(e: React.DragEvent) {
     e.preventDefault();
   }
@@ -96,9 +96,9 @@ export default function OneToDo({
       key={todo.id}
       disablePadding
       draggable={true}
-      onDragStart={(e) => dragStartHandler(e, todo)}
-      onDragLeave={(e) => dragLeaveHandler(e)}
-      onDragEnd={(e) => dragEndHandler(e)}
+      onDragStart={() => dragStartHandler(todo)}
+      onDragLeave={() => dragLeaveHandler()}
+      onDragEnd={() => dragEndHandler()}
       onDragOver={(e) => dragOverHandler(e)}
       onDrop={(e) => dropHandler(e, todo)}
     >
