@@ -1,4 +1,4 @@
-import { DragEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import {
@@ -29,6 +29,7 @@ interface ISectionListProps {
   setCurrentToDo: (todo: ToDo | null) => void;
   setToDoList: React.Dispatch<React.SetStateAction<ToDo[]>>;
   filteredToDoList: () => ToDo[];
+  index: number;
 }
 
 export default function Section({
@@ -41,13 +42,11 @@ export default function Section({
   setToDoList,
   filteredToDoList,
 }: ISectionListProps) {
-  const [sectionList, setSectionList] = useState<ISection[]>([]);
   const [includedToDo, setIncludedToDo] = useState<ToDo[]>([]);
   const [open, setOpen] = useState<boolean>(false);
-
   useEffect(() => {
     const currentToDo = filteredToDoList().filter((toDo) => {
-      return toDo.section === section.id;
+      return toDo.section == section.id;
     });
     setIncludedToDo(currentToDo);
   }, [toDoList, section]);
@@ -67,40 +66,8 @@ export default function Section({
     toggleRefresh();
   };
 
-  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-
-    if (currentToDo) {
-      const updatedToDoList = [...toDoList];
-      const updatedSectionList = [...sectionList];
-
-      const currentTaskIndex = updatedToDoList.findIndex(
-        (todo) => todo.id === currentToDo.id
-      );
-
-      if (currentTaskIndex !== -1) {
-        updatedToDoList[currentTaskIndex].section = section.id;
-
-        setToDoList(updatedToDoList);
-        setSectionList(updatedSectionList);
-
-        localStorage.setItem('todos', JSON.stringify(updatedToDoList));
-
-        setCurrentToDo(null);
-      }
-    }
-  };
-
   return (
-    <Box
-      sx={{ display: 'flex', justifyContent: 'space-between' }}
-      onDrop={(e) => handleDrop(e)}
-      onDragOver={(e) => handleDragOver(e)}
-    >
+    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
       <List component="div" disablePadding>
         <ListItemButton onClick={handleClick}>
           <FolderIcon />
@@ -112,27 +79,25 @@ export default function Section({
             {includedToDo.length === 0 ? (
               <h1>There are no todo's</h1>
             ) : (
-              includedToDo.map((todo: ToDo) => {
-                const labelId = `checkbox-list-label-${todo.id}`;
-                const textClass = todo.isCompleted
-                  ? 'list-item-text completed'
-                  : 'list-item-text';
-
-                return (
-                  <OneToDo
-                    key={todo.id}
-                    labelId={labelId}
-                    textClass={textClass}
-                    handleEditClick={handleEditClick}
-                    toggleRefresh={toggleRefresh}
-                    todo={todo}
-                    currentToDo={currentToDo}
-                    setCurrentToDo={setCurrentToDo}
-                    toDoList={toDoList}
-                    setToDoList={setToDoList}
-                  />
-                );
-              })
+              includedToDo.map((todo: ToDo, index) => (
+                <OneToDo
+                  key={todo.id}
+                  labelId={`checkbox-list-label-${todo.id}`}
+                  textClass={
+                    todo.isCompleted
+                      ? 'list-item-text completed'
+                      : 'list-item-text'
+                  }
+                  handleEditClick={handleEditClick}
+                  toggleRefresh={toggleRefresh}
+                  todo={todo}
+                  currentToDo={currentToDo}
+                  setCurrentToDo={setCurrentToDo}
+                  toDoList={toDoList}
+                  setToDoList={setToDoList}
+                  index={index}
+                />
+              ))
             )}
           </List>
         </Collapse>

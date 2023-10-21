@@ -9,6 +9,7 @@ import ControlButton from '../controlButton/ControlButton';
 import './toDoListStyle.css';
 import Section from '../section/Section';
 import OneToDo from '../oneToDo/OneToDo';
+import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
 
 export interface ToDo {
   id: string;
@@ -74,52 +75,102 @@ export default function ToDoList({
     localStorage.setItem('todos', JSON.stringify(updatedToDoList));
   };
 
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const sourceIndex = result.source.index;
+    const destinationIndex = result.destination.index;
+
+    if (result.source.droppableId === result.destination.droppableId) {
+      const items = Array.from(filteredToDoList());
+      const [reorderedItem] = items.splice(sourceIndex, 1);
+      items.splice(destinationIndex, 0, reorderedItem);
+
+      setToDoList(items);
+      localStorage.setItem('todos', JSON.stringify(toDoList));
+    } else {
+      const items = Array.from(filteredToDoList());
+      const toDoToMove = result.draggableId;
+      console.log('toDoToMove', toDoToMove);
+      const toDoNewFolder = result.destination.droppableId;
+      console.log('toDoNewFolder', toDoNewFolder);
+      console.log('items', items);
+      const newItems = items.map((el) => {
+        if (el.id == toDoToMove) {
+          return { ...el, section: toDoNewFolder };
+        }
+        return el;
+      });
+      console.log('newItems', newItems);
+
+      setToDoList(newItems);
+      localStorage.setItem('todos', JSON.stringify(toDoList));
+    }
+  };
+
   return (
     <>
-      <List className="list-container">
-        {sectionList.map((section) => (
-          <Section
-            key={section.id}
-            handleEditClick={handleEditClick}
-            section={section}
-            toDoList={toDoList}
-            currentToDo={currentToDo}
-            setToDoList={setToDoList}
-            setCurrentToDo={setCurrentToDo}
-            toggleRefresh={toggleRefresh}
-            filteredToDoList={filteredToDoList}
-          />
-        ))}
-      </List>
-      <List className="list-container">
-        {filteredToDoList().length === 0 ? (
-          <h1>There are no todo's</h1>
-        ) : (
-          filteredToDoList()
-            .filter((el) => el.section === '')
-            .map((todo: ToDo) => {
-              const labelId = `checkbox-list-label-${todo.id}`;
-              const textClass = todo.isCompleted
-                ? 'list-item-text completed'
-                : 'list-item-text';
+      <DragDropContext onDragEnd={onDragEnd}>
+        <List className="section-list">
+          {sectionList.map((section, index) => (
+            <Droppable droppableId={section.id.toString()} key={section.id}>
+              {(provided) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  <Section
+                    key={section.id}
+                    handleEditClick={handleEditClick}
+                    section={section}
+                    toDoList={toDoList}
+                    currentToDo={currentToDo}
+                    setToDoList={setToDoList}
+                    setCurrentToDo={setCurrentToDo}
+                    toggleRefresh={toggleRefresh}
+                    filteredToDoList={filteredToDoList}
+                    index={index}
+                  />
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          ))}
+        </List>
 
-              return (
-                <OneToDo
-                  key={todo.id}
-                  labelId={labelId}
-                  textClass={textClass}
-                  handleEditClick={handleEditClick}
-                  toggleRefresh={toggleRefresh}
-                  todo={todo}
-                  currentToDo={currentToDo}
-                  setCurrentToDo={setCurrentToDo}
-                  toDoList={toDoList}
-                  setToDoList={setToDoList}
-                />
-              );
-            })
-        )}
-      </List>
+        <Droppable droppableId={new Date().getTime().toString()}>
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {filteredToDoList().length === 0 ? (
+                <h1>There are no todos</h1>
+              ) : (
+                filteredToDoList()
+                  .filter((el) => !el.section)
+                  .map((todo: ToDo, index) => (
+                    <OneToDo
+                      key={todo.id}
+                      labelId={todo.id}
+                      textClass={
+                        todo.isCompleted
+                          ? 'list-item-text completed'
+                          : 'list-item-text'
+                      }
+                      handleEditClick={handleEditClick}
+                      toggleRefresh={toggleRefresh}
+                      todo={todo}
+                      currentToDo={currentToDo}
+                      setCurrentToDo={setCurrentToDo}
+                      toDoList={toDoList}
+                      setToDoList={setToDoList}
+                      index={index}
+                    />
+                  ))
+              )}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+
       <div className="bottom-block">
         <div className="btn-wrapper">
           <Counter length={toDoCount} />
