@@ -67,7 +67,13 @@ export default function Section({
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        borderBottom: '2px solid black',
+      }}
+    >
       <List component="div" disablePadding>
         <ListItemButton onClick={handleClick}>
           <FolderIcon />

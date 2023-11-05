@@ -106,7 +106,7 @@ export default function ToDoList({
       console.log('newItems', newItems);
 
       setToDoList(newItems);
-      localStorage.setItem('todos', JSON.stringify(toDoList));
+      localStorage.setItem('todos', JSON.stringify(newItems));
     }
   };
 

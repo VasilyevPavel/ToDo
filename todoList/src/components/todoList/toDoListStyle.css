@@ -10,6 +10,9 @@
     height: 150px;
   }
 }
+.section-list {
+  width: 100%;
+}
 
 .list-container {
   width: 100%;
