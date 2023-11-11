@@ -1,4 +1,4 @@
-https://vasilyevpavel.github.io/ToDo_Mindbox/
+[https://vasilyevpavel.github.io/ToDo_Mindbox/](https://vasilyevpavel.github.io/ToDo/)
 
 Инструкция по запуску приложения "ToDo_Mindbox"
 Установка зависимостей
