@@ -93,17 +93,15 @@ export default function ToDoList({
     } else {
       const items = Array.from(filteredToDoList());
       const toDoToMove = result.draggableId;
-      console.log('toDoToMove', toDoToMove);
+
       const toDoNewFolder = result.destination.droppableId;
-      console.log('toDoNewFolder', toDoNewFolder);
-      console.log('items', items);
+
       const newItems = items.map((el) => {
         if (el.id == toDoToMove) {
           return { ...el, section: toDoNewFolder };
         }
         return el;
       });
-      console.log('newItems', newItems);
 
       setToDoList(newItems);
       localStorage.setItem('todos', JSON.stringify(newItems));
