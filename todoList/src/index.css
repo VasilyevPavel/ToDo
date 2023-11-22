@@ -6,6 +6,7 @@ body {
   min-height: 100vh;
   justify-content: start;
   flex-direction: column;
+  background-color: rgb(127, 223, 255);
 }
 #root {
   width: 100%;

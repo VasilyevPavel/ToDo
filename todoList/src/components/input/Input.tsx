@@ -109,7 +109,7 @@ export default function Input({
       >
         <TextField
           fullWidth
-          label="ToDo"
+          label="ToDo or Folder"
           name="inputText"
           type="text"
           placeholder="What needs to be done"
